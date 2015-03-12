@@ -6,6 +6,7 @@
 
 package Controlador;
 
+import dao.LibroDAO;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -35,9 +36,25 @@ public class Controlador extends HttpServlet {
                 int idLibro = Integer.parseInt( request.getParameter("txtLibro").trim() );
                 int estado = Integer.parseInt( request.getParameter("estado").trim() );
                 
-                if(estado == 0){
-                    
+                switch(estado) {
+                   case 0:
+                       // libro entregado correctamnete
+                       // cambiar estado prestamo
+                      break;
+                   case 1:
+                       // libro perdido
+                       boolean result = LibroDAO.cambiarEstadoLibro(idLibro, estado);
+                       // generar multa
+                       break;
+                   case 2:
+                       // libro dañado
+                       boolean rs = LibroDAO.cambiarEstadoLibro(idLibro, estado);
+                       
+                       // generar multa
+                      break;
+        
                 }
+                
                 
         }else{
             response.sendRedirect("error404.jsp");

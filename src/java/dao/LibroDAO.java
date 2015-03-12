@@ -6,12 +6,15 @@
 
 package dao;
 
+import Modelo.Conectar;
 import dto.LibroDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,11 +22,11 @@ import java.util.LinkedList;
  */
 public class LibroDAO {
     
-    private static Connection cnn;
     private static ResultSet rs = null;
     private static PreparedStatement pst = null;
+    protected  static Connection  cnn = Conectar.getInstance();
     
-     public static String crearLibro(LibroDTO newLibro) {
+    public static String crearLibro(LibroDTO newLibro) {
         String sal = "";
         int res = 0;
         try {
@@ -45,7 +48,7 @@ public class LibroDAO {
         return sal;
     }
 
-    public String eliminarbyId(int idlibro) {
+    public static String eliminarbyId(int idlibro) {
         LibroDTO librodto = new LibroDTO();
         int resultado = 0;
         String salida = "";
@@ -64,7 +67,7 @@ public class LibroDAO {
 
     }
 
-    public String modificarLibro(LibroDTO modLibro){
+    public static String modificarLibro(LibroDTO modLibro){
         String fuera = "";
         int res = 0;
         try {
@@ -88,7 +91,7 @@ public class LibroDAO {
 
     }
 
-     public LinkedList<LibroDTO> listarLibros() {
+    public static LinkedList<LibroDTO> listarLibros() {
         LinkedList<LibroDTO> resultado = new LinkedList();
         try {
             String sql = "  SELECT idlibro, isbn, titulo, estado "
@@ -112,9 +115,8 @@ public class LibroDAO {
         }
         return resultado;
     }
-     
     
-      public LinkedList<LibroDTO> listarLibros(int estado) {
+    public static LinkedList<LibroDTO> listarLibros(int estado) {
         LinkedList<LibroDTO> resultadoLibro = new LinkedList();
         try {
             String sql = "  SELECT idlibro, isbn, titulo, estado "
@@ -140,5 +142,23 @@ public class LibroDAO {
         return resultadoLibro;
     }
     
+    public static boolean cambiarEstadoLibro(int idLibro, int estado){
+        boolean salida = false;    
+           String sql = "update libros set estado = ? where idlibro = ?";
+           
+        try {
+            pst = cnn.prepareStatement(sql);
+            pst.setInt(1, estado);
+            pst.setInt(2, idLibro);
+            int  res = pst.executeUpdate();
+            if(res > 0)
+                salida = true;
+            
+        } catch (SQLException ex) {
+            salida = false;
+        }
+        
+        return salida;
+    }
     
 }

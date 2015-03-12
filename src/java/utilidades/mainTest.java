@@ -7,8 +7,11 @@
 package utilidades;
 
 import Modelo.IMultas;
+import dao.LibroDAO;
 import dao.MultadoDAO;
+import dao.PrestamoDAO;
 import dto.MultadoDTO;
+import dto.PrestamoDTO;
 
 
 
@@ -20,15 +23,9 @@ public class mainTest {
     
     public static void main(String []args){
         
-        MultadoDTO m = IMultas.buscarMulta(1);
+        int rs = PrestamoDAO.consultarPrestamosByUser(1);
         
-          
-        
-        //int pg = MultadoDAO.consultarMultasUsuario(1);
-        
-        System.out.println("-"+m.toString());
-        
-            
+            System.out.println("-"+rs);
     }
     
 }
