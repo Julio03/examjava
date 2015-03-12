@@ -6,10 +6,10 @@
 
 package Controlador;
 
-import dao.LibroDAO;
 import dao.PrestamoDAO;
 import dto.PrestamoDTO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author -ADMIN-
  */
-public class Controlador extends HttpServlet {
+public class Prestamo extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,47 +33,24 @@ public class Controlador extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        if(request.getParameter("devolver") != null){
-                int cc = Integer.parseInt( request.getParameter("txtUser").trim());
-                int idLibro = Integer.parseInt( request.getParameter("txtLibro").trim() );
-                int estado = Integer.parseInt( request.getParameter("estado").trim() );
+            if(request.getParameter("registro") != null){
+                int user = Integer.parseInt(request.getParameter("txtUser").trim());
+                int idLibro = Integer.parseInt(request.getParameter("txtLibro"));
                 
-                //PrestamoDTO prestado = PrestamoDAO.consultarPrestamo();
-                
-                
-                switch(estado) {
-                   case 0:
-                       // libro entregado correctamnete
-                       PrestamoDTO p = PrestamoDAO.consultarPrestamoByUser(cc);
-                       int idPrestamo =  p.getIdPrestamo();
-                       boolean res = PrestamoDAO.cambiarEstadoPrestamo(0, idPrestamo);
-                       if(res == true)
-                            response.sendRedirect("index.jsp?msg=ok devuelto libro");
-                       else
-                            response.sendRedirect("index.jsp?msg= Error");
-                       
-                       
-                      break;
-                   case 1:
-                       // libro perdido
-                       boolean result = LibroDAO.cambiarEstadoLibro(idLibro, estado);
-                       response.sendRedirect("index.jsp?msg=Libro perdido");
-                       // generar multa
-                       break;
-                   case 2:
-                       // libro dañado
-                       boolean rs = LibroDAO.cambiarEstadoLibro(idLibro, estado);
-                       response.sendRedirect("index.jsp?msg= libro dañado");
-                       
-                       // generar multa
-                      break;
-        
+                // consultar prestamos
+                int prestamos = PrestamoDAO.consultarCantidadPrestamosByUser(user);
+                if(prestamos == 2 || prestamos > 2){
+                    response.sendRedirect("index.jsp?msg= Ya tiene 2 libros prestados");
+                }else{
+                    PrestamoDTO prestar = new PrestamoDTO(user, idLibro);
+                    String salida = PrestamoDAO.insertarPrestamo(prestar);
+                    response.sendRedirect("index.jsp?msg= Prestamo registrado!");
                 }
                 
-                
-        }else{
-            response.sendRedirect("error404.jsp");
-        }
+              
+            }else{
+                response.sendRedirect("index.jsp?msg= no puede ingresar");
+            }
         
         
         

@@ -50,6 +50,29 @@ public class PrestamoDAO {
         return salida;
     }
     
+    public static boolean cambiarEstadoPrestamo(int estado, int idPrestamo){
+        boolean res = false;
+        
+        String sql = "UPDATE prestamos SET estado= ? WHERE idprestamo= ?";
+       try {
+           pstmt = cnn.prepareStatement(sql);
+           pstmt.setInt(1, estado);
+           pstmt.setInt(2, idPrestamo);
+           int x = pstmt.executeUpdate();
+           if(x > 0)
+               res = true;
+           else
+               res = false;
+           
+           
+       } catch (SQLException ex) {
+           res = false;
+       }
+        
+        
+        return res;
+    }
+    
     public static List<PrestamoDTO> consultarPrestamos(){
         LinkedList<PrestamoDTO> prestamos = new LinkedList<PrestamoDTO>();
         try {
@@ -71,7 +94,27 @@ public class PrestamoDAO {
         return prestamos;
     }
     
-    public static int consultarPrestamosByUser(int id){
+    public static PrestamoDTO consultarPrestamoByUser(int user){
+        PrestamoDTO prestar = null;
+        
+        String sql = "select p.idprestamo, p.libroid, p.estado from prestamos p where p.userId = ?";
+       try {
+           pstmt = cnn.prepareStatement(sql);
+           pstmt.setInt(1, user);
+           rs = pstmt.executeQuery();
+           if(rs != null){
+               while(rs.next()){
+                   prestar = new PrestamoDTO(rs.getInt("idprestamo"), user, rs.getInt("libroid"), rs.getInt("estado"));
+               }
+           }
+       } catch (SQLException ex) {
+           prestar =  null;
+       }
+        
+        return prestar;
+    }
+    
+    public static int consultarCantidadPrestamosByUser(int id){
         int res = 0;
         String sql = "select count(idprestamo) as 'contar' from prestamos \n" +
                         "inner join usuarios on prestamos.userId = usuarios.iduser where iduser = ?";

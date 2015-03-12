@@ -12,8 +12,14 @@
         <title>JSP Page</title>
     </head>
     <body>
+        
+        <ul>
+            <a href="index.jsp">Inicio</a> |
+            <a href="registrarMulta.jsp"> Registrar Devolucion </a> 
+        </ul>
+        
         <h1> Registro Prestamo  </h1>
-        <form action="" method="post">
+        <form action="Prestamo" method="post">
             <table>
                 <tr>
                     <td><label> Usuario </label> </td>
@@ -26,10 +32,15 @@
                 <tr>
                     <td><input type="submit" name="registro" value="Registrar"/>  </td>
                 </tr>
-                
+                <%
+                    if(request.getParameter("msg") != null){ %>
+                    <tr>
+                        <td style="color: #009999"> <% out.println(request.getParameter("msg") ); %> </td>
+                    </tr>
+                 <%   }%>
                 
             </table>    
-            
+                
         </form>
         
     </body>

@@ -23,9 +23,11 @@ public class mainTest {
     
     public static void main(String []args){
         
-        int rs = PrestamoDAO.consultarPrestamosByUser(1);
+        PrestamoDTO p = PrestamoDAO.consultarPrestamoByUser(2);
         
-            System.out.println("-"+rs);
+        System.out.println("-"+p.toString());
+        
+            
     }
     
 }
