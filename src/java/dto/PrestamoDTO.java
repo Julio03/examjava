@@ -6,6 +6,8 @@
 
 package dto;
 
+import java.sql.Date;
+
 /**
  *
  * @author -ADMIN-
@@ -16,6 +18,33 @@ public class PrestamoDTO {
     private int usuarioId;
     private int libroId ;
     private int estado ;
+    private Date fechaPrestamo;
+    private Date fechaDevolucion;
+
+    
+    
+    public PrestamoDTO(int idPrestamo, Date fechaDevolucion) {
+        this.idPrestamo = idPrestamo;
+        this.fechaDevolucion = fechaDevolucion;
+    }
+
+    public PrestamoDTO(int idPrestamo, int usuarioId, int libroId, Date fechaPrestamo, Date fechaDevolucion) {
+        this.idPrestamo = idPrestamo;
+        this.usuarioId = usuarioId;
+        this.libroId = libroId;
+        this.fechaPrestamo = fechaPrestamo;
+        this.fechaDevolucion = fechaDevolucion;
+    }
+
+    public PrestamoDTO(int idPrestamo, int usuarioId, int libroId, int estado, Date fechaPrestamo, Date fechaDevolucion) {
+        this.idPrestamo = idPrestamo;
+        this.usuarioId = usuarioId;
+        this.libroId = libroId;
+        this.estado = estado;
+        this.fechaPrestamo = fechaPrestamo;
+        this.fechaDevolucion = fechaDevolucion;
+    }
+    
 
     public PrestamoDTO(int usuarioId, int libroId) {
         this.usuarioId = usuarioId;
@@ -35,6 +64,7 @@ public class PrestamoDTO {
         this.libroId = libroId;
         this.estado = estado;
     }
+    
     
     
     //UsuarioDTO user = null;
@@ -95,14 +125,29 @@ public class PrestamoDTO {
     public void setEstado(int estado) {
         this.estado = estado;
     }
+    
+    public Date getFechaPrestamo() {
+        return fechaPrestamo;
+    }
+
+    public void setFechaPrestamo(Date fechaPrestamo) {
+        this.fechaPrestamo = fechaPrestamo;
+    }
+
+    public Date getFechaDevolucion() {
+        return fechaDevolucion;
+    }
+
+    public void setFechaDevolucion(Date fechaDevolucion) {
+        this.fechaDevolucion = fechaDevolucion;
+    }
+
 
     @Override
     public String toString() {
-        return "PrestamoDTO " + "idPrestamo=" + idPrestamo
-                + ", usuarioId=" + usuarioId
-                + ", libroId=" + libroId
-                + ", estado=" + estado;
+        return "PrestamoDTO{" + "idPrestamo=" + idPrestamo + ", usuarioId=" + usuarioId + ", libroId=" + libroId + ", estado=" + estado + ", fechaPrestamo=" + fechaPrestamo + ", fechaDevolucion=" + fechaDevolucion + '}';
     }
+
 
     
 }

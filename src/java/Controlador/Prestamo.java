@@ -6,6 +6,7 @@
 
 package Controlador;
 
+import dao.MultadoDAO;
 import dao.PrestamoDAO;
 import dto.PrestamoDTO;
 import java.io.IOException;
@@ -42,9 +43,14 @@ public class Prestamo extends HttpServlet {
                 if(prestamos == 2 || prestamos > 2){
                     response.sendRedirect("index.jsp?msg= Ya tiene 2 libros prestados");
                 }else{
-                    PrestamoDTO prestar = new PrestamoDTO(user, idLibro);
-                    String salida = PrestamoDAO.insertarPrestamo(prestar);
-                    response.sendRedirect("index.jsp?msg= Prestamo registrado!");
+                    int multado = MultadoDAO.consultarMultasUsuario(user);
+                    if(multado != 0){
+                        response.sendRedirect("index.jsp?msg=Usuario tiene multas por pagar");
+                    }else{
+                        PrestamoDTO prestar = new PrestamoDTO(user, idLibro);
+                        String salida = PrestamoDAO.insertarPrestamo(prestar);
+                        response.sendRedirect("index.jsp?msg= Prestamo registrado!");
+                    }
                 }
                 
               

@@ -28,11 +28,11 @@ public class MultadoDTO {
         this.valorTotal = valorTotal;
     }
 
-    public MultadoDTO(int idMulta, int idPrestamo, Double valorTotal, String fechaPago, int estado) {
+    public MultadoDTO(int idMulta, int idPrestamo, Double valorTotal, String fechaMultas, int estado) {
         this.idMulta = idMulta;
         this.idPrestamo = idPrestamo;
         this.valorTotal = valorTotal;
-        this.fechaPago = fechaPago;
+        this.fechaMulta = fechaMultas;
         this.estado = estado;
     }
 

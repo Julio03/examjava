@@ -7,13 +7,17 @@
 package Controlador;
 
 import dao.LibroDAO;
+import dao.MultadoDAO;
 import dao.PrestamoDAO;
+import dto.MultadoDTO;
 import dto.PrestamoDTO;
 import java.io.IOException;
+import java.sql.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -44,14 +48,26 @@ public class Controlador extends HttpServlet {
                 switch(estado) {
                    case 0:
                        // libro entregado correctamnete
-                       PrestamoDTO p = PrestamoDAO.consultarPrestamoByUser(cc);
-                       int idPrestamo =  p.getIdPrestamo();
-                       boolean res = PrestamoDAO.cambiarEstadoPrestamo(0, idPrestamo);
-                       if(res == true)
-                            response.sendRedirect("index.jsp?msg=ok devuelto libro");
-                       else
-                            response.sendRedirect("index.jsp?msg= Error");
-                       
+                       PrestamoDTO p = PrestamoDAO.consultarPrestamoByUser(cc, idLibro);
+                       if(p != null){
+                            int idPrestamo =  p.getIdPrestamo();
+                            Date fechaDevolver = p.getFechaDevolucion();
+                            Double multa = MultadoDAO.verificarMultaUser(fechaDevolver);
+                            
+                            boolean res = PrestamoDAO.cambiarEstadoPrestamo(2, idPrestamo);
+                            if(res == true){
+                                  if(multa != 0.0){
+                                      MultadoDTO nm = new MultadoDTO(idPrestamo, null, multa);
+                                      String multar = MultadoDAO.agregarNuevaMulta(nm);
+                                      response.sendRedirect("index.jsp?msg=Usuario tiene multa por valor de "+multa );
+                                  }else
+                                      response.sendRedirect("index.jsp?msg=Registrada devolucion "+idPrestamo);
+                            }else
+                                    response.sendRedirect("index.jsp?msg= Error");
+                            
+                       }else{
+                           response.sendRedirect("registrarDevolucion.jsp?msg=No hay prestamos pendientes");
+                       }     
                        
                       break;
                    case 1:
@@ -71,8 +87,19 @@ public class Controlador extends HttpServlet {
                 }
                 
                 
+        }else if(request.getParameter("consultar") != null){
+            int user = Integer.parseInt(request.getParameter("txtUser"));
+                MultadoDTO nm = MultadoDAO.consultarMultasUsuarios(user);
+               
+                if(nm != null){
+                    HttpSession sesion = request.getSession(true);
+                    sesion.setAttribute("pagar", nm);
+                    response.sendRedirect("pagarmultas.jsp?user="+user);
+                }else{
+                    response.sendRedirect("pagarmultas.jsp?msg=Usuario no tiene multas pendientes");
+                }
         }else{
-            response.sendRedirect("error404.jsp");
+            response.sendRedirect("index.jsp");
         }
         
         

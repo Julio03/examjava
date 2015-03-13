@@ -6,12 +6,14 @@
 
 package utilidades;
 
-import Modelo.IMultas;
-import dao.LibroDAO;
 import dao.MultadoDAO;
 import dao.PrestamoDAO;
-import dto.MultadoDTO;
 import dto.PrestamoDTO;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 
 
@@ -23,11 +25,13 @@ public class mainTest {
     
     public static void main(String []args){
         
-        PrestamoDTO p = PrestamoDAO.consultarPrestamoByUser(2);
+        int x = MultadoDAO.consultarMultasUsuario(3);
         
-        System.out.println("-"+p.toString());
-        
-            
+        System.out.println(""+x);
+                
     }
+    
+    
+    
     
 }

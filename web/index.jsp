@@ -13,9 +13,10 @@
     </head>
     <body>
         
-        <ul>
+       <ul>
             <a href="index.jsp">Inicio</a> |
-            <a href="registrarMulta.jsp"> Registrar Devolucion </a> 
+            <a href="registrarDevolucion.jsp"> Registrar Devolucion </a> |
+            <a href="pagarmultas.jsp">Pago Multas </a> 
         </ul>
         
         <h1> Registro Prestamo  </h1>

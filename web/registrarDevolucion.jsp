@@ -12,6 +12,11 @@
         <title>JSP Page</title>
     </head>
     <body>
+         <ul>
+            <a href="index.jsp">Inicio</a> |
+            <a href="registrarDevolucion.jsp"> Registrar Devolucion </a> |
+            <a href="pagarmultas.jsp">Pago multas </a> 
+        </ul>
         <h1>Devolver Libro</h1>
         <form action="Controlador" method="POST">
             <table>

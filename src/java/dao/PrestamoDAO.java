@@ -61,8 +61,6 @@ public class PrestamoDAO {
            int x = pstmt.executeUpdate();
            if(x > 0)
                res = true;
-           else
-               res = false;
            
            
        } catch (SQLException ex) {
@@ -94,17 +92,18 @@ public class PrestamoDAO {
         return prestamos;
     }
     
-    public static PrestamoDTO consultarPrestamoByUser(int user){
+    public static PrestamoDTO consultarPrestamoByUser(int user, int libro){
         PrestamoDTO prestar = null;
         
-        String sql = "select p.idprestamo, p.libroid, p.estado from prestamos p where p.userId = ?";
+        String sql = "select p.idprestamo, p.libroid, p.estado, p.fechaDevolucion, p.fechaPrestamo from prestamos p where p.userId = ? and p.libroid = ? and p.estado = 1";
        try {
            pstmt = cnn.prepareStatement(sql);
            pstmt.setInt(1, user);
+           pstmt.setInt(2, libro);
            rs = pstmt.executeQuery();
            if(rs != null){
                while(rs.next()){
-                   prestar = new PrestamoDTO(rs.getInt("idprestamo"), user, rs.getInt("libroid"), rs.getInt("estado"));
+                   prestar = new PrestamoDTO(rs.getInt("idprestamo"), user, rs.getInt("libroid"), rs.getInt("estado"), rs.getDate("fechaPrestamo"), rs.getDate("fechaDevolucion"));                            
                }
            }
        } catch (SQLException ex) {
