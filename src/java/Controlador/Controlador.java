@@ -44,11 +44,11 @@ public class Controlador extends HttpServlet {
                 
                 //PrestamoDTO prestado = PrestamoDAO.consultarPrestamo();
                 
-                
+                PrestamoDTO p = PrestamoDAO.consultarPrestamoByUser(cc, idLibro);
                 switch(estado) {
                    case 0:
                        // libro entregado correctamnete
-                       PrestamoDTO p = PrestamoDAO.consultarPrestamoByUser(cc, idLibro);
+                       
                        if(p != null){
                             int idPrestamo =  p.getIdPrestamo();
                             Date fechaDevolver = p.getFechaDevolucion();
@@ -72,16 +72,25 @@ public class Controlador extends HttpServlet {
                       break;
                    case 1:
                        // libro perdido
-                       boolean result = LibroDAO.cambiarEstadoLibro(idLibro, estado);
-                       response.sendRedirect("index.jsp?msg=Libro perdido");
+                       MultadoDTO nm = new MultadoDTO();
+                       nm.setIdPrestamo(p.getIdPrestamo());
+                       nm.setEstado(1);
+                       nm.setValorTotal(50000.00);
+                       String multar = MultadoDAO.agregarNuevaMulta(nm);
+                       // cambiam ido o
+                       boolean result = LibroDAO.cambiarEstadoLibro(idLibro, 2);
+                       response.sendRedirect("index.jsp?msg=Valor perdida libro : "+nm.getValorTotal());
                        // generar multa
                        break;
                    case 2:
                        // libro dañado
-                       boolean rs = LibroDAO.cambiarEstadoLibro(idLibro, estado);
-                       response.sendRedirect("index.jsp?msg= libro dañado");
-                       
-                       // generar multa
+                       MultadoDTO nmd = new MultadoDTO();
+                       nmd.setIdPrestamo(p.getIdPrestamo());
+                       nmd.setEstado(1);
+                       nmd.setValorTotal(60000.00);
+                       String multa = MultadoDAO.agregarNuevaMulta(nmd);
+                       boolean rs = LibroDAO.cambiarEstadoLibro(idLibro, 1);
+                       response.sendRedirect("index.jsp?msg=libro dañado, Multa : "+nmd.getValorTotal());                       
                       break;
         
                 }

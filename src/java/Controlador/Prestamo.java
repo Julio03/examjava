@@ -47,9 +47,14 @@ public class Prestamo extends HttpServlet {
                     if(multado != 0){
                         response.sendRedirect("index.jsp?msg=Usuario tiene multas por pagar");
                     }else{
-                        PrestamoDTO prestar = new PrestamoDTO(user, idLibro);
-                        String salida = PrestamoDAO.insertarPrestamo(prestar);
-                        response.sendRedirect("index.jsp?msg= Prestamo registrado!");
+                        boolean moroso = PrestamoDAO.consultarMoraFechasaDevoluciones(user);
+                        if(moroso == true) {
+                            response.sendRedirect("index.jsp?msg=Usuario Moroso, fecha de prestamo vencido");
+                        }else{
+                            PrestamoDTO prestar = new PrestamoDTO(user, idLibro);
+                            String salida = PrestamoDAO.insertarPrestamo(prestar);
+                            response.sendRedirect("index.jsp?msg= Prestamo registrado!");
+                          }
                     }
                 }
                 

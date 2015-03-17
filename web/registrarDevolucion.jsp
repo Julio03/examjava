@@ -42,6 +42,12 @@
                     <td> <input  type="submit" name="devolver" value="Guardar" /> </td>
                 </tr>
                 
+                <%
+                    if(request.getParameter("msg") != null){ %>
+                    <tr>
+                        <td style="color: #009999"> <% out.println(request.getParameter("msg") ); %> </td>
+                    </tr>
+                 <%   }%>
             </table>
             
         </form>

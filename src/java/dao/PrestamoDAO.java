@@ -71,6 +71,23 @@ public class PrestamoDAO {
         return res;
     }
     
+    public static boolean consultarMoraFechasaDevoluciones(int iduser){
+        boolean salida = false;
+        String sql = "select idprestamo from prestamos where userId = ? AND estado = 1 AND  fechaDevolucion < now()";
+       try {
+           pstmt = cnn.prepareStatement(sql);
+           pstmt.setInt(1, iduser);
+           rs = pstmt.executeQuery();
+           if(rs != null){
+               salida = true;
+           }
+       } catch (SQLException ex) {
+           salida = false;
+       }
+//        
+        return salida;
+    }
+    
     public static List<PrestamoDTO> consultarPrestamos(){
         LinkedList<PrestamoDTO> prestamos = new LinkedList<PrestamoDTO>();
         try {
@@ -131,9 +148,7 @@ public class PrestamoDAO {
        } catch (SQLException ex) {
            res = 0;
        }
-        
-        
-        
+  
         return res;
     }
     
@@ -224,5 +239,6 @@ public class PrestamoDAO {
         }
         return salida;
     } 
+    
     
 }
